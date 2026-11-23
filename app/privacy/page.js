@@ -36,6 +36,7 @@ export default function PrivacyPage() {
           <p>We may update this policy as the service changes. The date at the top indicates when this page was last revised. Material changes should be communicated where required by law.</p>
           <h2>13. Contact</h2>
           <p>Privacy contact: <strong>[your privacy contact email]</strong><br/>Operator: <strong>[Your legal name or business name]</strong><br/>Business address, where required: <strong>[your business address]</strong></p>
+          <div className="legal-support"><h2>Need help?</h2><p>For general questions or support with Xsign, join our Discord community. For private data or privacy requests, use the privacy contact details above rather than posting personal information in a public channel.</p><a href="https://discord.gg/Fapt85usjU" target="_blank" rel="noreferrer">Join the Xsign Discord <span aria-hidden="true">↗</span></a></div>
         </article>
       </div>
     </section>
