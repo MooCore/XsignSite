@@ -46,6 +46,36 @@ async function readError(response) {
   }
 }
 
+function xhrUpload({ url, method = 'PUT', file, headers = {}, onProgress, timeoutMs = 15 * 60 * 1000 }) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open(method, url, true);
+    xhr.timeout = timeoutMs;
+    Object.entries(headers).forEach(([name, value]) => xhr.setRequestHeader(name, value));
+    xhr.upload.addEventListener('progress', (event) => {
+      const loaded = event.loaded || 0;
+      const total = event.lengthComputable && event.total ? event.total : file.size;
+      onProgress?.(total ? Math.min(100, (loaded / total) * 100) : 0, loaded, total);
+    });
+    xhr.onload = () => {
+      let body = {};
+      try { body = xhr.responseText ? JSON.parse(xhr.responseText) : {}; } catch { body = {}; }
+      if (xhr.status >= 200 && xhr.status < 300) {
+        resolve(body);
+        return;
+      }
+      const uploadError = new Error(body.message || `Upload failed (${xhr.status}).`);
+      uploadError.status = xhr.status;
+      uploadError.code = body.code;
+      reject(uploadError);
+    };
+    xhr.onerror = () => reject(new Error('The upload connection was interrupted. Check your connection and retry.'));
+    xhr.ontimeout = () => reject(new Error('The upload took too long. Please retry or use the IPA URL option.'));
+    xhr.onabort = () => reject(new Error('The upload was cancelled.'));
+    xhr.send(file);
+  });
+}
+
 async function uploadOne(file, purpose, onProgress) {
   const presignResponse = await fetch(`${API_BASE}/v1/uploads/presign`, {
     method: 'POST',
@@ -56,12 +86,29 @@ async function uploadOne(file, purpose, onProgress) {
   if (!presignResponse.ok) throw new Error(await readError(presignResponse));
   const presign = await presignResponse.json();
   if (!presign.uploadUrl || !presign.objectKey) throw new Error('The signing API returned an incomplete upload response.');
-  onProgress?.(`Uploading ${file.name}…`);
   const headers = { ...(presign.headers || {}) };
   if (!Object.keys(headers).some((key) => key.toLowerCase() === 'content-type')) headers['Content-Type'] = file.type || 'application/octet-stream';
-  const putResponse = await fetch(presign.uploadUrl, { method: 'PUT', headers, body: file, credentials: 'omit' });
-  if (!putResponse.ok) throw new Error(`Could not upload ${file.name} (${putResponse.status}). Check Tigris CORS and the upload URL configuration.`);
+  await xhrUpload({
+    url: presign.uploadUrl,
+    file,
+    headers,
+    onProgress: (percent) => onProgress?.(percent),
+  });
   return presign.objectKey;
+}
+
+async function uploadIpaDirect(file, onProgress) {
+  return xhrUpload({
+    url: `${API_BASE}/v1/uploads/ipa-direct`,
+    method: 'POST',
+    file,
+    headers: {
+      'Content-Type': 'application/octet-stream',
+      'X-File-Name': encodeURIComponent(file.name),
+      'X-File-Size': String(file.size),
+    },
+    onProgress,
+  });
 }
 
 export default function SigningForm() {
@@ -89,8 +136,22 @@ export default function SigningForm() {
   const [error, setError] = useState('');
   const [result, setResult] = useState(null);
   const [jobId, setJobId] = useState('');
+  const [uploadCapabilities, setUploadCapabilities] = useState(null);
 
   const selectedFileCount = useMemo(() => [ipaFile, p12File, profileFile, iconFile, ...tweakFiles].filter(Boolean).length, [ipaFile, p12File, profileFile, iconFile, tweakFiles]);
+
+  useEffect(() => {
+    if (!API_BASE) return undefined;
+    let active = true;
+    fetch(`${API_BASE}/v1/capabilities`, { cache: 'no-store', credentials: 'omit' })
+      .then(async (response) => {
+        if (!response.ok) throw new Error(await readError(response));
+        return response.json();
+      })
+      .then((capabilities) => { if (active) setUploadCapabilities(capabilities); })
+      .catch(() => { if (active) setUploadCapabilities({ directIpaUploadEnabled: false, directIpaUploadMaxBytes: 0, maxIpaBytes: 500 * 1024 * 1024 }); });
+    return () => { active = false; };
+  }, []);
 
   useEffect(() => {
     if (!jobId || !API_BASE) return undefined;
@@ -140,23 +201,108 @@ export default function SigningForm() {
       catch { setError('Enter a valid HTTP or HTTPS IPA URL.'); return; }
     }
 
-    setBusy(true); setStage('Preparing uploads');
+    setBusy(true); setStage('Checking upload limits');
     try {
-      let ipaObjectKey = null;
-      if (ipaFile) ipaObjectKey = await uploadOne(ipaFile, 'ipa', setStage);
-      const p12ObjectKey = await uploadOne(p12File, 'p12', setStage);
-      const mobileprovisionObjectKey = await uploadOne(profileFile, 'mobileprovision', setStage);
-      const iconObjectKey = iconFile ? await uploadOne(iconFile, 'app-icon', setStage) : null;
-      const tweakObjectKeys = [];
-      for (const file of tweakFiles) tweakObjectKeys.push(await uploadOne(file, 'tweak', setStage));
+      let capabilities = uploadCapabilities;
+      if (!capabilities) {
+        try {
+          const capabilityResponse = await fetch(`${API_BASE}/v1/capabilities`, { cache: 'no-store', credentials: 'omit' });
+          if (!capabilityResponse.ok) throw new Error('Upload limits unavailable');
+          capabilities = await capabilityResponse.json();
+          setUploadCapabilities(capabilities);
+        } catch {
+          capabilities = { directIpaUploadEnabled: false, directIpaUploadMaxBytes: 0, maxIpaBytes: 500 * 1024 * 1024 };
+        }
+      }
 
-      setStage('Creating signing job');
+      const maximumIpaBytes = Number(capabilities.maxIpaBytes || (500 * 1024 * 1024));
+      if (ipaFile && ipaFile.size > maximumIpaBytes) {
+        throw new Error(`This IPA is larger than Xsign's ${Math.floor(maximumIpaBytes / (1024 * 1024))} MB upload limit.`);
+      }
+
+      let ipaObjectKey = null;
+      let ipaDirectUploadId = null;
+      if (ipaFile) {
+        const directLimit = Number(capabilities.directIpaUploadMaxBytes || 0);
+        const directAllowed = Boolean(capabilities.directIpaUploadEnabled) && directLimit > 0 && ipaFile.size <= directLimit;
+        if (directAllowed) {
+          setStage('Uploading IPA directly to Render');
+          try {
+            const directResult = await uploadIpaDirect(ipaFile, (percent) => {
+              setStage(`Uploading IPA directly to Render · ${Math.round(percent)}%`);
+              setProgress(Math.min(10, Math.round(percent / 10)));
+            });
+            ipaDirectUploadId = directResult.uploadId;
+            if (!ipaDirectUploadId) throw new Error('Render did not confirm the IPA upload.');
+            setProgress(10);
+            setStage('IPA received by Render — preparing the other signing files');
+          } catch (directError) {
+            if (directError.code !== 'DIRECT_UPLOAD_TOO_LARGE' && directError.code !== 'DIRECT_UPLOAD_CAPACITY_LOW' && directError.status !== 413 && directError.status !== 503) throw directError;
+            setUploadCapabilities((current) => current ? {
+              ...current,
+              directIpaUploadEnabled: false,
+              directIpaUploadMaxBytes: Math.min(Number(current.directIpaUploadMaxBytes || 0), Math.max(0, ipaFile.size - 1)),
+            } : current);
+            setStage('Render upload limit reached — automatically switching this IPA to Tigris');
+            ipaObjectKey = await uploadOne(ipaFile, 'ipa', (percent) => {
+              setStage(`Uploading large IPA to Tigris · ${Math.round(percent)}%`);
+              setProgress(Math.min(10, Math.round(percent / 10)));
+            });
+            setProgress(10);
+            setStage('Large IPA safely uploaded to Tigris');
+          }
+        } else {
+          setStage('Large IPA detected — uploading through Tigris storage');
+          ipaObjectKey = await uploadOne(ipaFile, 'ipa', (percent) => {
+            setStage(`Uploading large IPA to Tigris · ${Math.round(percent)}%`);
+            setProgress(Math.min(10, Math.round(percent / 10)));
+          });
+          setProgress(10);
+          setStage('Large IPA safely uploaded to Tigris');
+        }
+      } else {
+        setStage('Using the supplied IPA URL');
+        setProgress(2);
+      }
+
+      const supportingFiles = [
+        { file: p12File, purpose: 'p12', label: 'P12 certificate' },
+        { file: profileFile, purpose: 'mobileprovision', label: 'mobileprovision profile' },
+        ...(iconFile ? [{ file: iconFile, purpose: 'app-icon', label: 'app icon' }] : []),
+        ...tweakFiles.map((file) => ({ file, purpose: 'tweak', label: file.name })),
+      ];
+      const supportingBytes = supportingFiles.reduce((sum, item) => sum + item.file.size, 0);
+      let completedSupportingBytes = 0;
+      const uploadSupporting = async ({ file, purpose, label }) => {
+        setStage(`Preparing ${label} upload`);
+        const objectKey = await uploadOne(file, purpose, (percent) => {
+          const uploaded = file.size * (percent / 100);
+          const fraction = supportingBytes ? (completedSupportingBytes + uploaded) / supportingBytes : 1;
+          setProgress(Math.min(19, 10 + Math.round(fraction * 9)));
+          setStage(`Uploading ${label} to secure storage · ${Math.round(percent)}%`);
+        });
+        completedSupportingBytes += file.size;
+        setProgress(supportingBytes ? Math.min(19, 10 + Math.round((completedSupportingBytes / supportingBytes) * 9)) : 19);
+        return objectKey;
+      };
+
+      const p12ObjectKey = await uploadSupporting(supportingFiles[0]);
+      const mobileprovisionObjectKey = await uploadSupporting(supportingFiles[1]);
+      let nextSupportingIndex = 2;
+      const iconObjectKey = iconFile ? await uploadSupporting(supportingFiles[nextSupportingIndex++]) : null;
+      const tweakObjectKeys = [];
+      while (nextSupportingIndex < supportingFiles.length) {
+        tweakObjectKeys.push(await uploadSupporting(supportingFiles[nextSupportingIndex++]));
+      }
+
+      setProgress(20);
+      setStage('Submitting the signing job to Xsign');
       const createResponse = await fetch(`${API_BASE}/v1/signing/jobs`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'omit',
         body: JSON.stringify({
-          inputs: { ipaObjectKey, ipaUrl: ipaUrl.trim() || null, p12ObjectKey, mobileprovisionObjectKey, iconObjectKey, tweakObjectKeys },
+          inputs: { ipaObjectKey, ipaDirectUploadId, ipaUrl: ipaUrl.trim() || null, p12ObjectKey, mobileprovisionObjectKey, iconObjectKey, tweakObjectKeys },
           p12Password,
           options: { appName: appName.trim() || null, bundleId: bundleId.trim() || null, appVersion: appVersion.trim() || null, buildNumber: buildNumber.trim() || null, minimumIOS: minimumIOS.trim() || null, proMotion, gameMode, removeExtensions, removeWatchApp },
         }),
@@ -165,6 +311,7 @@ export default function SigningForm() {
       const created = await createResponse.json();
       if (!created.jobId) throw new Error('The signing API did not return a job ID.');
       setJobId(created.jobId);
+      setProgress(20);
       setStage(created.stage || 'Queued for signing');
     } catch (submitError) {
       setError(submitError.message || 'Unable to submit the signing job.');
@@ -194,6 +341,9 @@ export default function SigningForm() {
             <FilePicker label="IPA file" hint=".ipa file" accept=".ipa,application/octet-stream" file={ipaFile} onChange={setIpaFile} />
             <div className="or-divider"><span>OR USE AN IPA URL</span></div>
             <FormField label="IPA URL" value={ipaUrl} onChange={setIpaUrl} placeholder="https://example.com/application.ipa" hint="Optional — use instead of an uploaded IPA" />
+            {ipaFile && <div className="upload-route-note" aria-live="polite">
+              {!uploadCapabilities ? 'Checking the available upload route…' : (uploadCapabilities.directIpaUploadEnabled && ipaFile.size <= Number(uploadCapabilities.directIpaUploadMaxBytes || 0) ? 'Fast route: this IPA will stream directly to Render. Larger files automatically switch to Tigris.' : 'Large-file route: this IPA will upload directly to Tigris to avoid the Render upload limit.')}
+            </div>}
           </div>
 
           <div className="signing-file-section signing-credentials-section">
@@ -240,7 +390,7 @@ export default function SigningForm() {
           </section>
 
           {error && <div className="form-alert form-alert-error" role="alert"><Icon name="info" size={17}/><span>{error}</span></div>}
-          {busy && <div className="progress-card" aria-live="polite"><div className="progress-head"><span><i className="progress-spinner"/>{stage || 'Processing'}</span><strong>{progress}%</strong></div><div className="progress-track"><i style={{ width: `${progress}%` }}/></div><small>{jobId ? `Job ID: ${jobId}` : 'Preparing your files for the signing worker.'}</small></div>}
+          {busy && <div className="progress-card" aria-live="polite"><div className="progress-head"><span><i className="progress-spinner"/>{stage || 'Processing'}</span><strong>{progress}%</strong></div><div className="progress-track" role="progressbar" aria-label="Signing progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress}><i style={{ width: `${progress}%` }}/></div><small>{jobId ? `Job ID: ${jobId}` : 'Live upload progress is shown here. Files within the Render upload limit use the direct route; larger IPAs automatically use Tigris.'}</small></div>}
           {result && <div className="result-card" role="status"><div className="result-icon"><Icon name="check" size={19}/></div><div className="result-content"><h3>Your signed IPA is ready</h3><p>Signing completed successfully. Use the available links below.</p><div className="result-links">{(result.installUrl || result.otaUrl) && <a className="button button-primary" href={result.installUrl || result.otaUrl}>Install via OTA <Icon name="phone" size={15}/></a>}{(result.downloadUrl || result.ipaUrl) && <a className="button button-secondary" href={result.downloadUrl || result.ipaUrl} target="_blank" rel="noreferrer">Download IPA <Icon name="arrow" size={15}/></a>}{result.manifestUrl && <a className="result-text-link" href={result.manifestUrl} target="_blank" rel="noreferrer">View manifest</a>}</div></div></div>}
           <div className="submit-row submit-row-compact">
             <div className="submit-note"><Icon name="lock" size={13}/><span>{selectedFileCount} file{selectedFileCount === 1 ? '' : 's'} selected</span></div>
