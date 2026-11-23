@@ -1,0 +1,12 @@
+{
+  "name": "Xsign",
+  "short_name": "Xsign",
+  "description": "iOS IPA signing and customization",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2475df",
+  "icons": [
+    { "src": "/xsign-icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
