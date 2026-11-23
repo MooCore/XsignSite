@@ -489,3 +489,222 @@ button { cursor: pointer; }
 }
 
 .upload-route-note { margin: -5px 0 14px; padding: 9px 11px; border: 1px solid #e1ebf8; border-radius: 7px; background: #f6faff; color: #6682a5; font-size: 9px; line-height: 1.55; }
+
+/* Xsign streamlined template inspired by minimal web signers */
+.x-home-hero {
+  padding: 66px 0 58px;
+  background: linear-gradient(180deg, #f7faff 0%, #ffffff 100%);
+  border-bottom: 1px solid #eaf0f8;
+}
+.x-home-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 390px);
+  align-items: center;
+  gap: 64px;
+  max-width: 1040px;
+}
+.x-home-copy { max-width: 590px; }
+.x-home-kicker, .x-signer-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #3977c8;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.15px;
+}
+.x-home-kicker i, .x-preview-status i {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #2783ed;
+  box-shadow: 0 0 0 4px #e5f0ff;
+}
+.x-home-copy h1 {
+  margin: 18px 0 13px;
+  color: #142b49;
+  font-family: 'Manrope', sans-serif;
+  font-size: clamp(38px, 5vw, 54px);
+  line-height: 1.1;
+  letter-spacing: -2.2px;
+  font-weight: 800;
+}
+.x-home-copy h1 span { color: #2776dc; }
+.x-home-copy > p {
+  max-width: 520px;
+  margin: 0;
+  color: #6e7f95;
+  font-size: 14px;
+  line-height: 1.8;
+}
+.x-home-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 24px; }
+.x-home-trust { display: flex; align-items: center; gap: 7px; margin-top: 22px; color: #8291a5; font-size: 10px; }
+.x-home-trust svg { color: #4b83cc; flex: 0 0 auto; }
+.x-home-preview {
+  overflow: hidden;
+  border: 1px solid #e1eaf6;
+  border-radius: 13px;
+  background: #fff;
+  box-shadow: 0 16px 44px rgba(29, 67, 119, .08);
+}
+.x-preview-top { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px; border-bottom: 1px solid #edf2f8; background: #fcfdff; }
+.x-preview-brand { display: inline-flex; align-items: center; gap: 8px; color: #1b3454; font-size: 13px; font-weight: 800; }
+.x-preview-mark { display: grid; place-items: center; width: 25px; height: 25px; border-radius: 7px; color: #fff; background: #2677e2; font-size: 15px; font-style: italic; font-weight: 900; }
+.x-preview-status { display: inline-flex; align-items: center; gap: 8px; color: #6c8c7c; font-size: 10px; font-weight: 700; }
+.x-preview-status i { width: 6px; height: 6px; background: #31ad7a; box-shadow: 0 0 0 3px #e5f7ef; }
+.x-preview-body { padding: 20px; }
+.x-preview-title { display: flex; align-items: center; justify-content: space-between; margin-bottom: 17px; }
+.x-preview-title small { color: #8da0b7; font-size: 8px; font-weight: 800; letter-spacing: 1px; }
+.x-preview-title h2 { margin: 4px 0 0; color: #1d3655; font-size: 21px; letter-spacing: -.7px; }
+.x-preview-file-icon { display: grid; place-items: center; width: 39px; height: 39px; border-radius: 10px; color: #347bd8; background: #edf5ff; }
+.x-preview-upload { display: flex; align-items: center; gap: 11px; padding: 13px; border: 1px dashed #c8d9ed; border-radius: 8px; background: #fbfdff; }
+.x-preview-upload > span { display: grid; place-items: center; width: 31px; height: 31px; color: #347bd8; background: #edf5ff; border-radius: 7px; }
+.x-preview-upload strong, .x-preview-upload small { display: block; }
+.x-preview-upload strong { color: #3c526d; font-size: 10px; }
+.x-preview-upload small { margin-top: 4px; color: #96a4b6; font-size: 8px; }
+.x-preview-files { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+.x-preview-files > div { min-width: 0; padding: 10px; border: 1px solid #edf1f6; border-radius: 7px; }
+.x-preview-files small, .x-preview-files strong { display: block; }
+.x-preview-files small { margin-bottom: 7px; color: #93a2b6; font-size: 7px; font-weight: 800; letter-spacing: .7px; }
+.x-preview-files strong { display: flex; align-items: center; gap: 5px; color: #50647e; font-size: 8px; white-space: nowrap; }
+.x-preview-files svg { color: #4785d7; }
+.x-preview-advanced { display: flex; align-items: center; gap: 8px; margin-top: 13px; padding: 10px; color: #526a86; border: 1px solid #edf1f6; border-radius: 7px; font-size: 9px; font-weight: 700; }
+.x-preview-advanced svg:first-child { color: #3e7dce; }
+.x-preview-advanced svg:last-child { margin-left: auto; color: #94a2b4; }
+.x-preview-sign { display: flex; align-items: center; justify-content: space-between; margin-top: 13px; padding: 11px 13px; border-radius: 7px; color: #fff; background: #2674dc; font-size: 10px; font-weight: 800; }
+.x-home-features { padding: 47px 0 64px; }
+.x-home-section-heading { margin-bottom: 20px; text-align: center; }
+.x-home-section-heading > span { color: #4780c6; font-size: 9px; font-weight: 800; letter-spacing: 1.2px; }
+.x-home-section-heading h2 { margin: 8px 0 6px; color: #1b3453; font-size: 23px; letter-spacing: -.65px; }
+.x-home-section-heading p { margin: 0; color: #7b8ba0; font-size: 11px; }
+.x-home-feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.x-home-feature { padding: 18px; border: 1px solid #e6edf6; border-radius: 9px; background: #fff; }
+.x-feature-icon { display: grid; place-items: center; width: 32px; height: 32px; color: #3178d5; background: #edf5ff; border-radius: 8px; }
+.x-home-feature h3 { margin: 12px 0 5px; color: #304762; font-size: 12px; }
+.x-home-feature p { margin: 0; color: #7b8ba0; font-size: 10px; line-height: 1.65; }
+.x-home-bottom-cta { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 16px; padding: 16px 18px; border: 1px solid #e4edf8; border-radius: 9px; background: #f8fbff; }
+.x-home-bottom-cta strong, .x-home-bottom-cta span { display: block; }
+.x-home-bottom-cta strong { color: #2c4562; font-size: 11px; }
+.x-home-bottom-cta span { margin-top: 4px; color: #8493a7; font-size: 9px; }
+.x-home-bottom-cta .button { min-height: 36px; padding: 0 13px; font-size: 10px; border-radius: 7px; }
+
+.x-signer-page { min-height: 700px; padding: 27px 0 60px; background: #f7f9fc; }
+.x-signer-container { max-width: 750px; }
+.x-signer-back { display: inline-flex; align-items: center; gap: 5px; color: #71839a; font-size: 10px; font-weight: 700; }
+.x-signer-back svg { transform: rotate(180deg); }
+.x-signer-back:hover { color: #2674dc; }
+.x-signer-heading { margin: 22px 0 20px; }
+.x-signer-kicker { color: #6e91be; font-size: 9px; }
+.x-signer-heading h1 { margin: 7px 0 5px; color: #182f4d; font-size: 31px; letter-spacing: -1.1px; }
+.x-signer-heading p { margin: 0; color: #75859a; font-size: 12px; line-height: 1.65; }
+.xsign-form-layout { display: block; }
+.xsign-form-layout .signing-form { width: 100%; }
+.xsign-signer-card { margin: 0; padding: 20px; border: 1px solid #e3eaf3; border-radius: 11px; background: #fff; box-shadow: 0 4px 18px rgba(24, 57, 102, .035); }
+.xsign-card-heading { display: flex; align-items: center; gap: 10px; margin: 0 0 18px; padding-bottom: 15px; border-bottom: 1px solid #edf1f6; }
+.xsign-card-heading-icon { display: grid; place-items: center; width: 32px; height: 32px; flex: 0 0 auto; border-radius: 8px; color: #347bd9; background: #eef5ff; }
+.xsign-card-heading > div:nth-child(2) { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.xsign-card-heading strong { color: #29435f; font-size: 12px; }
+.xsign-card-heading small { color: #8796a9; font-size: 9px; }
+.xsign-card-heading .required-caption { margin-left: auto; padding: 0; font-size: 9px; }
+.xsign-signer-card .field-block { margin-bottom: 11px; }
+.xsign-signer-card .field-heading { align-items: center; margin-bottom: 6px; }
+.xsign-signer-card .field-heading label { color: #3b506a; font-size: 10px; font-weight: 800; }
+.xsign-signer-card .field-hint { color: #95a2b3; font-size: 8px; }
+.xsign-signer-card .file-drop { min-height: 52px; border: 1px dashed #cbd9e9; border-radius: 7px; background: #fbfdff; }
+.xsign-signer-card .file-drop:hover, .xsign-signer-card .file-drop.dragging { border-color: #6ca0e2; background: #f6faff; }
+.xsign-signer-card .file-drop.has-file { border-style: solid; border-color: #cbdcf1; background: #fbfdff; }
+.xsign-signer-card .file-pick-content { min-height: 50px; gap: 9px; padding: 7px 10px; }
+.xsign-signer-card .upload-icon { width: 28px; height: 28px; border-radius: 6px; color: #347bd9; background: #edf5ff; }
+.xsign-signer-card .upload-icon svg { width: 15px; height: 15px; }
+.xsign-signer-card .file-pick-content strong { color: #3d6fae; font-size: 10px; }
+.xsign-signer-card .file-pick-content strong em { color: #8999ad; font-size: 9px; font-weight: 500; }
+.xsign-signer-card .file-pick-content small { display: none; }
+.xsign-signer-card .selected-files { padding: 5px 9px; }
+.xsign-signer-card .selected-file { min-height: 38px; }
+.xsign-signer-card .selected-file-icon { width: 25px; height: 25px; }
+.xsign-signer-card .selected-file-info strong { font-size: 9px; }
+.xsign-signer-card .selected-file-info small { font-size: 8px; }
+.xsign-signer-card .remove-file, .xsign-signer-card .add-more-files { font-size: 9px; }
+.xsign-ipa-block { padding-bottom: 16px; border-bottom: 1px solid #edf1f6; }
+.xsign-ipa-block > .field-block:first-child .file-drop { min-height: 68px; background: #fbfdff; }
+.xsign-ipa-block > .field-block:first-child .file-pick-content { min-height: 66px; padding-left: 14px; }
+.xsign-ipa-block > .field-block:first-child .upload-icon { width: 34px; height: 34px; }
+.xsign-or-divider { margin: 10px 0; }
+.xsign-or-divider span { color: #9aa8b9; font-size: 8px; letter-spacing: .6px; }
+.xsign-signer-card .text-input { min-height: 38px; padding: 0 10px; border: 1px solid #dce5ef; border-radius: 7px; font-size: 10px; }
+.xsign-signer-card .password-field-block { margin: 12px 0 15px; }
+.xsign-signer-card .password-input-wrap .text-input { padding-right: 39px; }
+.xsign-signer-card .password-toggle { width: 36px; height: 38px; }
+.xsign-signer-card .privacy-hint { margin-top: 6px; color: #8797ab; font-size: 8px; }
+.xsign-credentials-heading { display: flex; justify-content: space-between; align-items: center; margin: 14px 0 9px; }
+.xsign-credentials-heading strong { color: #334b66; font-size: 10px; }
+.xsign-credentials-heading span { color: #98a5b5; font-size: 8px; }
+.xsign-credentials-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.xsign-credential-card { min-width: 0; padding: 10px; border: 1px solid #edf1f6; border-radius: 8px; background: #fff; }
+.xsign-credential-card .field-block { margin-bottom: 0; }
+.xsign-credential-card .field-heading { display: block; }
+.xsign-credential-card .field-hint { display: block; margin-top: 3px; }
+.xsign-credential-card .file-drop { min-height: 43px; }
+.xsign-credential-card .file-pick-content { min-height: 41px; padding: 5px 7px; }
+.xsign-credential-card .upload-icon { width: 25px; height: 25px; }
+.xsign-credential-card .file-pick-content strong { font-size: 9px; }
+.xsign-credential-card .file-pick-content strong em { display: none; }
+.xsign-advanced-inline { margin-top: 15px; border: 1px solid #e6ecf4; border-radius: 8px; background: #fbfcfe; }
+.xsign-advanced-inline .advanced-heading-compact { min-height: 43px; padding: 8px 11px; background: #fbfcfe; }
+.xsign-advanced-inline .advanced-heading-copy { gap: 8px; }
+.xsign-advanced-inline .advanced-heading-copy strong { color: #3c526e; font-size: 10px; }
+.xsign-advanced-inline .advanced-heading-copy small { color: #8c9aab; font-size: 8px; }
+.xsign-advanced-inline .advanced-content-compact { padding: 13px; background: #fff; }
+.xsign-advanced-inline .field-block { margin-bottom: 9px; }
+.xsign-advanced-inline .text-input { min-height: 36px; }
+.xsign-advanced-inline .switch-row { min-height: 48px; padding: 8px 10px; }
+.xsign-advanced-inline .switch-title { font-size: 9px; }
+.xsign-advanced-inline .switch-copy small { font-size: 8px; }
+.xsign-advanced-inline .field-block-compact .file-drop { min-height: 42px; }
+.xsign-advanced-inline .field-block-compact .file-pick-content { min-height: 40px; }
+.xsign-signer-card .form-alert { margin: 12px 0; padding: 10px 11px; font-size: 10px; }
+.xsign-progress-card { margin-top: 14px; padding: 12px; }
+.xsign-progress-card .progress-head { font-size: 9px; }
+.xsign-progress-card > small { font-size: 8px; }
+.xsign-result-card { margin-top: 14px; padding: 13px; }
+.xsign-result-card .result-content h3 { font-size: 12px; }
+.xsign-result-card .result-content p { font-size: 9px; }
+.xsign-result-card .result-links .button { min-height: 34px; padding: 0 10px; font-size: 9px; }
+.xsign-submit-row { margin-top: 15px; padding-top: 14px; border-top: 1px solid #edf1f6; }
+.xsign-submit-row .submit-button { min-height: 42px; padding: 0 19px; border-radius: 7px; font-size: 11px; }
+.xsign-submit-row .submit-note { color: #8695a8; font-size: 9px; }
+.x-signer-info-grid { display: grid; grid-template-columns: .85fr 1.15fr; gap: 12px; margin-top: 17px; }
+.x-signer-info-card { padding: 17px; border: 1px solid #e5ebf3; border-radius: 9px; background: #fff; }
+.x-signer-info-card h2 { margin: 0 0 8px; color: #304762; font-size: 12px; }
+.x-signer-info-card > p { margin: 0; color: #7b8ba0; font-size: 9px; line-height: 1.7; }
+.x-signer-info-card > a { display: inline-flex; align-items: center; gap: 5px; margin-top: 12px; color: #3478d3; font-size: 9px; font-weight: 700; }
+.x-signer-howto ol { display: grid; gap: 11px; margin: 0; padding: 0; list-style: none; }
+.x-signer-howto li { display: flex; align-items: flex-start; gap: 9px; }
+.x-signer-howto li > span { display: grid; place-items: center; width: 20px; height: 20px; flex: 0 0 auto; border-radius: 6px; color: #3178d7; background: #edf5ff; font-size: 9px; font-weight: 800; }
+.x-signer-howto li strong { color: #405772; font-size: 9px; }
+.x-signer-howto li p { margin: 3px 0 0; color: #8795a8; font-size: 8px; line-height: 1.5; }
+
+@media (max-width: 760px) {
+  .x-home-hero { padding: 48px 0 42px; }
+  .x-home-grid { grid-template-columns: 1fr; gap: 28px; }
+  .x-home-copy h1 { font-size: clamp(36px, 10vw, 46px); letter-spacing: -1.5px; }
+  .x-home-copy > p { font-size: 12px; }
+  .x-home-trust { align-items: flex-start; font-size: 9px; line-height: 1.5; }
+  .x-home-preview { max-width: 440px; width: 100%; margin: 0 auto; }
+  .x-home-features { padding: 37px 0 45px; }
+  .x-home-feature-grid { grid-template-columns: 1fr; }
+  .x-home-feature { padding: 14px; }
+  .x-home-bottom-cta { align-items: flex-start; flex-direction: column; }
+  .x-signer-page { padding: 20px 0 45px; }
+  .x-signer-heading { margin: 17px 0 16px; }
+  .x-signer-heading h1 { font-size: 27px; }
+  .xsign-signer-card { padding: 14px; }
+  .xsign-card-heading { margin-bottom: 14px; }
+  .xsign-credentials-grid { grid-template-columns: 1fr; gap: 8px; }
+  .xsign-credential-card { padding: 9px; }
+  .x-signer-info-grid { grid-template-columns: 1fr; }
+  .xsign-submit-row { align-items: stretch; flex-direction: column; }
+  .xsign-submit-row .submit-button { width: 100%; }
+  .xsign-submit-row .submit-note { justify-content: center; }
+}
