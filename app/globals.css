@@ -369,3 +369,121 @@ button { cursor: pointer; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+
+/* Xsign clean, compact interface refresh */
+.brand { min-width: 0; gap: 0; }
+.brand-logo { display: block; width: 58px; height: 58px; object-fit: contain; border-radius: 10px; }
+.site-header { background: rgba(255,255,255,.97); backdrop-filter: blur(10px); }
+.header-inner { height: 70px; }
+.desktop-nav { gap: 26px; margin-right: 24px; }
+
+.simple-home-hero { padding: 76px 0 70px; background: #f7faff; border-bottom: 1px solid #e8eff8; }
+.simple-home-content { max-width: 900px; text-align: center; }
+.simple-eyebrow { display: inline-block; color: #2e73cf; font-size: 10px; font-weight: 800; letter-spacing: 1.25px; }
+.simple-home-content h1 { color: #142945; font-size: clamp(34px, 5vw, 52px); line-height: 1.12; letter-spacing: -1.8px; margin: 14px 0 13px; font-weight: 800; }
+.simple-home-content h1 span { color: var(--blue); }
+.simple-home-content > p { max-width: 620px; margin: 0 auto; color: #697b94; font-size: 15px; line-height: 1.7; }
+.simple-home-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 25px; }
+.simple-home-note { display: flex; justify-content: center; align-items: center; gap: 7px; margin-top: 24px; color: #7789a1; font-size: 11px; }
+.simple-home-note svg { color: #4380d1; }
+.simple-steps-section { padding: 58px 0 70px; }
+.simple-section-heading { text-align: center; margin-bottom: 24px; }
+.simple-section-heading h2 { margin: 8px 0 0; color: #1c3452; font-size: 25px; letter-spacing: -.7px; }
+.simple-step-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.simple-step-card { padding: 20px; border: 1px solid #e3ebf6; border-radius: 10px; background: #fff; }
+.simple-step-number { display: inline-grid; place-items: center; width: 27px; height: 27px; border-radius: 7px; background: #edf4ff; color: #246dcc; font-size: 11px; font-weight: 800; }
+.simple-step-card h3 { margin: 13px 0 6px; color: #263e5c; font-size: 14px; }
+.simple-step-card p { margin: 0; color: #73839a; font-size: 12px; line-height: 1.65; }
+
+.simple-sign-page { min-height: 650px; background: #f7f9fc; padding: 42px 0 72px; }
+.simple-sign-container { max-width: 760px; }
+.simple-sign-heading { text-align: left; margin: 0 0 22px; }
+.simple-sign-heading h1 { color: #172e4c; font-size: 32px; letter-spacing: -1px; margin: 8px 0 7px; }
+.simple-sign-heading p { max-width: 650px; margin: 0; color: #718198; font-size: 13px; line-height: 1.65; }
+.signing-layout-simple { display: block; }
+.signing-layout-simple .signing-form { width: 100%; }
+.signing-panel { padding: 22px; border: 1px solid #e2e9f2; border-radius: 12px; box-shadow: 0 3px 14px rgba(30,60,100,.035); }
+.signing-panel-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 18px; }
+.signing-panel-heading h2 { margin: 0 0 4px; color: #203955; font-size: 17px; letter-spacing: -.25px; }
+.signing-panel-heading p { margin: 0; color: #8492a6; font-size: 11px; }
+.required-caption { color: #8593a7; font-size: 10px; padding-top: 4px; }
+.signing-file-section { padding: 0 0 16px; }
+.signing-credentials-section { padding-top: 16px; border-top: 1px solid #edf1f6; }
+.signing-panel .field-block { margin-bottom: 13px; }
+.signing-panel .field-heading { margin-bottom: 6px; }
+.signing-panel .field-heading label { color: #344b67; font-size: 11px; font-weight: 700; }
+.signing-panel .field-hint { color: #8b98aa; font-size: 10px; }
+.signing-panel .file-drop { min-height: 47px; border: 1px solid #dce5f0; border-radius: 7px; background: #fff; }
+.signing-panel .file-drop:hover, .signing-panel .file-drop.dragging { border-color: #76a6e8; background: #f9fbff; }
+.signing-panel .file-pick-content { min-height: 45px; padding: 7px 11px; gap: 8px; }
+.signing-panel .upload-icon { width: 26px; height: 26px; border-radius: 6px; background: #eff5ff; }
+.signing-panel .upload-icon svg { width: 15px; height: 15px; }
+.signing-panel .file-pick-content strong { color: #356eae; font-size: 11px; font-weight: 700; }
+.signing-panel .file-pick-content strong em { color: #8998aa; font-weight: 500; }
+.signing-panel .file-pick-content small { display: none; }
+.signing-panel .selected-file { padding: 8px 10px; min-height: 44px; }
+.signing-panel .selected-file-icon { width: 25px; height: 25px; }
+.signing-panel .selected-file-info strong { font-size: 10px; }
+.signing-panel .selected-file-info small { font-size: 9px; }
+.signing-panel .add-more-files { font-size: 10px; padding: 5px 10px; }
+.signing-panel .or-divider { margin: 12px 0; }
+.signing-panel .or-divider span { font-size: 9px; }
+.signing-panel .text-input { min-height: 39px; padding: 0 11px; border: 1px solid #dce5f0; border-radius: 7px; font-size: 11px; }
+.signing-panel .password-input-wrap { position: relative; }
+.signing-panel .password-field-block { margin: 2px 0 13px; }
+.signing-panel .password-toggle { width: 38px; height: 39px; }
+.signing-panel .privacy-hint { font-size: 9px; margin-top: 6px; }
+.advanced-inline { margin-top: 4px; border: 1px solid #e2e9f2; border-radius: 8px; background: #fbfcfe; overflow: hidden; }
+.advanced-heading-compact { padding: 11px 13px; border-radius: 0; background: #fbfcfe; min-height: 49px; }
+.advanced-heading-copy { display: flex; align-items: center; gap: 9px; color: #3b76bf; text-align: left; }
+.advanced-heading-copy > span { display: flex; flex-direction: column; gap: 2px; }
+.advanced-heading-copy strong { color: #304a68; font-size: 11px; }
+.advanced-heading-copy small { color: #8795a8; font-size: 9px; font-weight: 400; }
+.advanced-content-compact { padding: 14px; border-top: 1px solid #e8edf4; }
+.advanced-content-compact .subsection-heading { padding-bottom: 8px; margin-bottom: 11px; }
+.advanced-content-compact .subsection-heading h3 { font-size: 11px; }
+.advanced-content-compact .subsection-heading span { font-size: 9px; }
+.advanced-content-compact .subsection-spaced { margin-top: 18px; }
+.advanced-content-compact .field-block { margin-bottom: 10px; }
+.advanced-content-compact .switch-row { min-height: 54px; padding: 9px 11px; }
+.advanced-content-compact .switch-title { font-size: 10px; }
+.advanced-content-compact .switch-copy small { font-size: 9px; }
+.advanced-content-compact .field-block-compact .file-drop { min-height: 44px; }
+.advanced-content-compact .field-block-compact .file-pick-content { min-height: 42px; }
+.tweak-upload-space { margin-top: 12px; }
+.submit-row-compact { padding-top: 16px; margin-top: 16px; border-top: 1px solid #edf1f6; }
+.submit-row-compact .submit-button { min-width: 150px; min-height: 42px; font-size: 12px; border-radius: 7px; }
+.submit-row-compact .submit-note { font-size: 10px; }
+.signing-panel .form-alert { font-size: 11px; padding: 10px 12px; }
+.signing-panel .progress-card { padding: 12px; }
+.signing-panel .progress-head { font-size: 10px; }
+.signing-panel .result-card { padding: 13px; }
+.signing-panel .result-content h3 { font-size: 13px; }
+
+.legal-support { margin-top: 34px; padding: 18px; border: 1px solid #dfe9f7; border-radius: 10px; background: #f7faff; }
+.legal-support h2 { margin: 0 0 8px; font-size: 16px; }
+.legal-support p { margin: 0 0 12px; }
+.legal-support a { display: inline-flex; align-items: center; gap: 6px; color: #246dca; font-size: 12px; font-weight: 700; }
+.legal-support a:hover { text-decoration: underline; }
+
+@media (max-width: 760px) {
+  .brand-logo { width: 52px; height: 52px; }
+  .header-inner { height: 66px; }
+  .simple-home-hero { padding: 58px 0 48px; }
+  .simple-home-content h1 { font-size: clamp(33px, 9vw, 44px); letter-spacing: -1.2px; }
+  .simple-home-content > p { font-size: 13px; }
+  .simple-home-note { align-items: flex-start; text-align: left; font-size: 10px; }
+  .simple-steps-section { padding: 42px 0 48px; }
+  .simple-section-heading h2 { font-size: 21px; }
+  .simple-step-grid { grid-template-columns: 1fr; gap: 10px; }
+  .simple-step-card { padding: 16px; }
+  .simple-sign-page { padding: 30px 0 48px; }
+  .simple-sign-heading h1 { font-size: 28px; }
+  .signing-panel { padding: 15px; }
+  .signing-panel-heading h2 { font-size: 16px; }
+  .advanced-content-compact { padding: 12px; }
+  .submit-row-compact { align-items: stretch; flex-direction: column; }
+  .submit-row-compact .submit-button { width: 100%; }
+  .submit-row-compact .submit-note { justify-content: center; }
+}
