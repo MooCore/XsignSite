@@ -2,12 +2,18 @@
 
 Blue-and-white Next.js frontend for the Xsign iOS IPA signing service. This package contains the website only. The Render API and signing worker are delivered separately and must be deployed before real signing can work.
 
-## Included pages
+## Included pages and assets
 
-- `/` — Xsign home page
-- `/sign` — IPA signing form, P12 certificate password field, provisioning profile, app metadata, ProMotion/Game Mode settings, icon upload and combined `.deb` / `.dylib` tweak upload
-- `/privacy` — privacy policy starter template
-- `/terms` — terms of service starter template
+- `/` — simplified Xsign homepage with direct signer and Discord support links
+- `/sign` — compact single-panel IPA, P12, P12-password and mobileprovision form, with a smaller collapsed advanced-options menu
+- `/privacy` — privacy policy starter template with a Discord support invitation
+- `/terms` — terms of service starter template with a Discord support invitation
+- `public/xsign-logo.webp` — supplied Xsign logo used in the site header and footer
+- `public/favicon.ico`, `public/favicon.png`, `public/xsign-icon.png`, `public/apple-touch-icon.png` — browser, shortcut and Apple touch icons made from the supplied logo
+- `public/xsign-twitter-card.png` — 1200×630 Open Graph / Twitter large-image preview
+- `public/site.webmanifest` — installable-site manifest and icon configuration
+
+The social metadata is configured for Open Graph and Twitter `summary_large_image`. Set `NEXT_PUBLIC_SITE_URL` to the real public site origin in Vercel so crawler metadata resolves to the deployed Xsign URL rather than the development fallback.
 
 ## Requirements
 
@@ -38,7 +44,7 @@ The home, privacy and terms pages can be viewed before the backend exists. The s
 
    `NEXT_PUBLIC_API_BASE_URL` = `https://YOUR-RENDER-API.onrender.com`
 
-6. Optionally set `NEXT_PUBLIC_SITE_URL` to your public Xsign domain (for example, `https://xsign.yourdomain.com`).
+6. Set `NEXT_PUBLIC_SITE_URL` to the exact public Xsign origin, including `https://` and with no trailing slash. This is used for canonical and social-card URLs.
 7. Deploy. After changing environment variables, redeploy so the frontend build receives the new public API origin.
 
 ### Vercel CLI deployment
