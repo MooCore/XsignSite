@@ -10,7 +10,7 @@ export default function PrivacyPage() {
         <div className="legal-notice"><strong>Owner review required before launch.</strong> This is a starter policy for the planned Xsign workflow, not legal advice. Replace the bracketed operator/contact details and ensure the statements match the deployed backend, storage configuration, retention schedule and analytics tools before making the site public.</div>
         <article className="legal-content">
           <h2>1. Who operates Xsign</h2>
-          <p>Xsign ("we", "us" or "our") is operated by <strong>[Your legal name or business name]</strong>. For privacy questions or requests, contact <strong>[your privacy contact email]</strong>.</p>
+          <p>Xsign ("we", "us" or "our") is operated by <strong>Xsign Services</strong>. For privacy questions or requests, contact <strong>@xsign.lol on Discord</strong>.</p>
           <h2>2. Information processed</h2>
           <p>Depending on the features you use, Xsign may process:</p>
           <ul><li>IPA files, app icons, tweak files and related application metadata;</li><li>P12 certificate files, provisioning profiles and the P12 password you submit for a signing job;</li><li>signing-job identifiers, status, timestamps, error details and generated output links;</li><li>technical request information such as IP address, browser information and security logs collected by the hosting or backend providers.</li></ul>
@@ -27,7 +27,7 @@ export default function PrivacyPage() {
           <h2>8. Security</h2>
           <p>We intend to use HTTPS, restricted object access, short-lived upload links, access controls and limited logging. No internet service can guarantee absolute security. The operator must verify these controls in the deployed environment.</p>
           <h2>9. Your choices and requests</h2>
-          <p>Depending on the laws that apply to you, you may have rights to request access, correction or deletion of personal information. Send requests to <strong>[your privacy contact email]</strong>. We may need to verify your identity and retain limited records where legally permitted or required.</p>
+          <p>Depending on the laws that apply to you, you may have rights to request access, correction or deletion of personal information. Send requests to <strong>@xsign.lol on Discord</strong>. We may need to verify your identity and retain limited records where legally permitted or required.</p>
           <h2>10. Children</h2>
           <p>Xsign is not designed for children who are below the minimum age required to use the service under applicable law. Do not submit another person's personal information or signing credentials without authorization.</p>
           <h2>11. International processing</h2>
@@ -35,7 +35,7 @@ export default function PrivacyPage() {
           <h2>12. Changes</h2>
           <p>We may update this policy as the service changes. The date at the top indicates when this page was last revised. Material changes should be communicated where required by law.</p>
           <h2>13. Contact</h2>
-          <p>Privacy contact: <strong>[your privacy contact email]</strong><br/>Operator: <strong>[Your legal name or business name]</strong><br/>Business address, where required: <strong>[your business address]</strong></p>
+          <p>Privacy contact: <strong>@xsign.lol - Discord</strong><br/>Operator: <strong>@afk.lol</strong></p>
           <div className="legal-support"><h2>Need help?</h2><p>For general questions or support with Xsign, join our Discord community. For private data or privacy requests, use the privacy contact details above rather than posting personal information in a public channel.</p><a href="https://discord.gg/Fapt85usjU" target="_blank" rel="noreferrer">Join the Xsign Discord <span aria-hidden="true">↗</span></a></div>
         </article>
       </div>
