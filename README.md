@@ -5,7 +5,7 @@ Blue-and-white Next.js frontend for the Xsign iOS IPA signing service. This pack
 ## Included pages and assets
 
 - `/` — simplified Xsign homepage with direct signer and Discord support links
-- `/sign` — compact single-panel IPA, P12, P12-password and mobileprovision form, with a smaller collapsed advanced-options menu
+- `/sign` — compact single-panel IPA, P12, P12-password and mobileprovision form, with live upload progress and automatic direct-Render/Tigris routing for the IPA
 - `/privacy` — privacy policy starter template with a Discord support invitation
 - `/terms` — terms of service starter template with a Discord support invitation
 - `public/xsign-logo.webp` — supplied Xsign logo used in the site header and footer
@@ -66,6 +66,14 @@ npx vercel --prod
 
 The separate Render project must implement these endpoints and enable CORS for the Vercel site origin:
 
+### `GET /v1/capabilities`
+
+Returns the maximum supported IPA size and the current safe direct-Render IPA threshold. The frontend uses this response to choose the direct upload route or Tigris fallback.
+
+### `POST /v1/uploads/ipa-direct`
+
+Receives a raw `.ipa` file body as `application/octet-stream`, with `X-File-Name` and `X-File-Size` headers. It streams the file to Render's temporary disk and returns an `uploadId`. If Render reports HTTP 413 or local disk capacity is insufficient, the frontend automatically retries the file through Tigris.
+
 ### `POST /v1/uploads/presign`
 
 Request:
@@ -100,7 +108,8 @@ Request:
 ```json
 {
   "inputs": {
-    "ipaObjectKey": "incoming/ipa-key",
+    "ipaObjectKey": null,
+    "ipaDirectUploadId": "upload-id-from-direct-render-upload",
     "ipaUrl": null,
     "p12ObjectKey": "incoming/p12-key",
     "mobileprovisionObjectKey": "incoming/profile-key",
@@ -122,7 +131,7 @@ Request:
 }
 ```
 
-The frontend may instead send `ipaUrl` and `ipaObjectKey: null`. The backend must validate remote URLs against SSRF, private IP, redirect and size attacks before fetching them.
+The frontend may instead send `ipaUrl`, an `ipaObjectKey` for Tigris fallback, or an `ipaDirectUploadId` for a streamed Render upload; exactly one IPA source is used per job. The backend must validate remote URLs against SSRF, private IP, redirect and size attacks before fetching them.
 
 Response:
 
@@ -162,7 +171,13 @@ When failed:
 { "jobId": "job-id", "status": "failed", "error": "A clear user-safe error message" }
 ```
 
-The frontend polls the status endpoint every 2.2 seconds until completion or failure.
+The frontend polls the status endpoint every 2.2 seconds until completion or failure. Uploads use XHR progress events so the UI reports byte-transfer percentages as well as each backend processing stage.
+
+## IPA upload routing and progress
+
+The signer requests `/v1/capabilities` from Render to read the maximum IPA size and direct-upload threshold. An IPA at or below `DIRECT_IPA_UPLOAD_MAX_MB` streams directly to Render's temporary disk. Larger files automatically use Tigris. If Render rejects a direct request with HTTP 413, the website automatically retries using Tigris. The signed IPA and OTA manifest are always stored in Tigris so their download URLs remain available to iOS devices.
+
+The UI shows upload percentages for direct Render uploads and Tigris uploads, then displays the backend's current stages (certificate/profile retrieval, IPA extraction, app configuration, tweak preparation, signing, signature verification, result storage and OTA manifest generation). Configure the direct threshold on Render; it is not inferred from the compute plan.
 
 ## Tigris configuration for the Render backend
 
