@@ -10,7 +10,7 @@ export default function TermsPage() {
         <div className="legal-notice"><strong>Owner review required before launch.</strong> This is a starter terms template, not legal advice. Replace bracketed details, select the governing jurisdiction, confirm service capabilities and have the final terms reviewed for your business and intended markets.</div>
         <article className="legal-content">
           <h2>1. Agreement</h2>
-          <p>These Terms of Service ("Terms") govern your access to and use of Xsign (the "Service"), operated by <strong>[Your legal name or business name]</strong> ("Xsign", "we", "us" or "our"). By accessing or using the Service, you agree to these Terms. If you do not agree, do not use the Service.</p>
+          <p>These Terms of Service ("Terms") govern your access to and use of Xsign (the "Service"), operated by <strong>Xsign Services</strong> ("Xsign", "we", "us" or "our"). By accessing or using the Service, you agree to these Terms. If you do not agree, do not use the Service.</p>
           <h2>2. Eligibility and account responsibility</h2>
           <p>You must be legally able to enter into a binding agreement and satisfy the minimum age requirements that apply in your location. You are responsible for the accuracy of information you submit and for keeping your credentials secure.</p>
           <h2>3. Authorization and ownership</h2>
@@ -28,11 +28,11 @@ export default function TermsPage() {
           <h2>9. Availability and changes</h2>
           <p>We may change, suspend or discontinue all or part of the Service, including features, supported file types, upload limits and processing availability. We do not promise uninterrupted or error-free operation.</p>
           <h2>10. Intellectual property</h2>
-          <p>The Service's branding, interface and original materials are owned by or licensed to <strong>[Your legal name or business name]</strong>. These Terms do not transfer ownership of your uploaded files or grant you rights to third-party software.</p>
+          <p>The Service's branding, interface and original materials are owned by or licensed to <strong>Xsign Services</strong>. These Terms do not transfer ownership of your uploaded files or grant you rights to third-party software.</p>
           <h2>11. Disclaimers</h2>
           <p>To the maximum extent permitted by applicable law, the Service is provided "as is" and "as available" without warranties of any kind, whether express, implied or statutory. Nothing in these Terms excludes a warranty or right that cannot legally be excluded.</p>
           <h2>12. Limitation of liability</h2>
-          <p>To the maximum extent permitted by applicable law, <strong>[Your legal name or business name]</strong> will not be liable for indirect, incidental, special, consequential or punitive damages, loss of data, loss of profits, app removal, certificate revocation or device incompatibility arising from use of the Service. Insert any legally required liability limits and exceptions after review.</p>
+          <p>To the maximum extent permitted by applicable law, <strong>Xsign Services</strong> will not be liable for indirect, incidental, special, consequential or punitive damages, loss of data, loss of profits, app removal, certificate revocation or device incompatibility arising from use of the Service. Insert any legally required liability limits and exceptions after review.</p>
           <h2>13. Indemnity</h2>
           <p>To the extent permitted by law, you are responsible for claims arising from your files, your lack of authorization, your misuse of signing credentials or your violation of these Terms or another person's rights. Have this section reviewed for enforceability in your jurisdiction.</p>
           <h2>14. Suspension and termination</h2>
@@ -42,7 +42,7 @@ export default function TermsPage() {
           <h2>16. Changes to these Terms</h2>
           <p>We may revise these Terms from time to time. The revised version will be posted on this page with an updated date. Continued use after changes take effect means you accept the revised Terms to the extent permitted by law.</p>
           <h2>17. Contact</h2>
-          <p>Operator: <strong>[Your legal name or business name]</strong><br/>Contact email: <strong>[your contact email]</strong><br/>Address, where required: <strong>[your business address]</strong></p>
+          <p>Privacy contact: <strong>@xsign.lol - Discord</strong><br/>Operator: <strong>@afk.lol</strong></p>
           <div className="legal-support"><h2>Support</h2><p>For general assistance, questions about using Xsign or help with signing issues, join the Xsign Discord server.</p><a href="https://discord.gg/Fapt85usjU" target="_blank" rel="noreferrer">Join the Xsign Discord <span aria-hidden="true">↗</span></a></div>
         </article>
       </div>
