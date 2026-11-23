@@ -43,6 +43,7 @@ export default function TermsPage() {
           <p>We may revise these Terms from time to time. The revised version will be posted on this page with an updated date. Continued use after changes take effect means you accept the revised Terms to the extent permitted by law.</p>
           <h2>17. Contact</h2>
           <p>Operator: <strong>[Your legal name or business name]</strong><br/>Contact email: <strong>[your contact email]</strong><br/>Address, where required: <strong>[your business address]</strong></p>
+          <div className="legal-support"><h2>Support</h2><p>For general assistance, questions about using Xsign or help with signing issues, join the Xsign Discord server.</p><a href="https://discord.gg/Fapt85usjU" target="_blank" rel="noreferrer">Join the Xsign Discord <span aria-hidden="true">↗</span></a></div>
         </article>
       </div>
     </section>
