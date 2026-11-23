@@ -73,7 +73,7 @@ export default function SigningForm() {
   const [profileFile, setProfileFile] = useState(null);
   const [iconFile, setIconFile] = useState(null);
   const [tweakFiles, setTweakFiles] = useState([]);
-  const [advancedOpen, setAdvancedOpen] = useState(true);
+  const [advancedOpen, setAdvancedOpen] = useState(false);
   const [appName, setAppName] = useState('');
   const [bundleId, setBundleId] = useState('');
   const [appVersion, setAppVersion] = useState('');
@@ -179,49 +179,76 @@ export default function SigningForm() {
   };
 
   return (
-    <div className="signing-layout">
+    <div className="signing-layout signing-layout-simple">
       <form className="signing-form" onSubmit={handleSubmit}>
-        <section className="form-card">
-          <div className="form-card-heading"><div className="form-step-icon"><Icon name="upload" size={19}/></div><div><span className="form-eyebrow">STEP 01</span><h2>Application file</h2><p>Upload an IPA or provide a direct download URL.</p></div></div>
-          <FilePicker label="IPA file" hint="IPA format · large files upload directly to storage" accept=".ipa,application/octet-stream" file={ipaFile} onChange={setIpaFile} />
-          <div className="or-divider"><span>OR USE A DIRECT URL</span></div>
-          <FormField label="IPA URL" value={ipaUrl} onChange={setIpaUrl} placeholder="https://example.com/application.ipa" hint="Optional — use instead of an uploaded IPA" />
-        </section>
+        <section className="form-card signing-panel">
+          <div className="signing-panel-heading">
+            <div>
+              <h2>Signing files</h2>
+              <p>IPA, certificate and provisioning profile</p>
+            </div>
+            <span className="required-caption">* Required</span>
+          </div>
 
-        <section className="form-card">
-          <div className="form-card-heading"><div className="form-step-icon"><Icon name="shield" size={19}/></div><div><span className="form-eyebrow">STEP 02</span><h2>Signing credentials</h2><p>Your certificate and provisioning profile must be compatible.</p></div></div>
-          <FilePicker label="P12 certificate" hint=".p12 or .pfx certificate file" accept=".p12,.pfx,application/x-pkcs12" file={p12File} onChange={setP12File} required />
-          <div className="field-block password-field-block"><div className="field-heading"><label htmlFor="p12-password">P12 password</label><span className="field-hint">Enter it if your certificate is password-protected</span></div><div className="password-input-wrap"><input id="p12-password" className="text-input" type={showPassword ? 'text' : 'password'} value={p12Password} onChange={(event) => setP12Password(event.target.value)} placeholder="Enter P12 password" autoComplete="new-password"/><button type="button" className="password-toggle" onClick={() => setShowPassword(!showPassword)} aria-label={showPassword ? 'Hide P12 password' : 'Show P12 password'}><Icon name={showPassword ? 'eyeOff' : 'eye'} size={18}/></button></div><div className="privacy-hint"><Icon name="lock" size={14}/> Sent securely with the signing job. Not saved in browser storage.</div></div>
-          <FilePicker label="Mobile provisioning profile" hint=".mobileprovision file" accept=".mobileprovision,application/octet-stream" file={profileFile} onChange={setProfileFile} required />
-        </section>
+          <div className="signing-file-section">
+            <FilePicker label="IPA file" hint=".ipa file" accept=".ipa,application/octet-stream" file={ipaFile} onChange={setIpaFile} />
+            <div className="or-divider"><span>OR USE AN IPA URL</span></div>
+            <FormField label="IPA URL" value={ipaUrl} onChange={setIpaUrl} placeholder="https://example.com/application.ipa" hint="Optional — use instead of an uploaded IPA" />
+          </div>
 
-        <section className="form-card advanced-card">
-          <button type="button" className="advanced-heading" onClick={() => setAdvancedOpen(!advancedOpen)} aria-expanded={advancedOpen}><div className="form-card-heading"><div className="form-step-icon"><Icon name="sliders" size={19}/></div><div><span className="form-eyebrow">STEP 03 · OPTIONAL</span><h2>Advanced options</h2><p>Customize metadata, display support and included files.</p></div></div><span className={`accordion-chevron${advancedOpen ? ' expanded' : ''}`}><Icon name="chevron" size={19}/></span></button>
-          {advancedOpen && <div className="advanced-content">
-            <div className="subsection-heading"><h3>App information</h3><span>Leave blank to keep detected values</span></div>
-            <div className="form-grid-two"><FormField label="App name" value={appName} onChange={setAppName} placeholder="My App"/><FormField label="Bundle identifier" value={bundleId} onChange={setBundleId} placeholder="com.example.app"/><FormField label="App version" value={appVersion} onChange={setAppVersion} placeholder="1.0.0"/><FormField label="Build number" value={buildNumber} onChange={setBuildNumber} placeholder="1"/><FormField label="Minimum iOS version" value={minimumIOS} onChange={setMinimumIOS} placeholder="15.0" hint="Only set a value supported by the app"/></div>
-            <div className="subsection-heading subsection-spaced"><h3>Display and gaming</h3><span>Optional Info.plist settings</span></div>
-            <div className="switch-list"><Switch label="ProMotion support" description="Add the iPhone high-refresh-rate support property. Does not force an app to render at 120 FPS." checked={proMotion} onChange={setProMotion}/><Switch label="Game Mode support" description="Declare Game Mode support for compatible iOS versions. Does not guarantee system prioritization." checked={gameMode} onChange={setGameMode}/></div>
-            <div className="subsection-heading subsection-spaced"><h3>Application contents</h3><span>Optional cleanup</span></div>
-            <div className="switch-list"><Switch label="Remove app extensions" description="Ask the signing worker to remove embedded app extensions where supported." checked={removeExtensions} onChange={setRemoveExtensions}/><Switch label="Remove bundled Watch app" description="Ask the signing worker to remove the embedded Watch app where supported." checked={removeWatchApp} onChange={setRemoveWatchApp}/></div>
-            <div className="subsection-heading subsection-spaced"><h3>Additional files</h3><span>Optional assets and tweaks</span></div>
-            <FilePicker label="App icon" hint="PNG recommended · square image" accept=".png,.jpg,.jpeg,image/png,image/jpeg" file={iconFile} onChange={setIconFile} compact/>
-            <div className="tweak-upload-space"><FilePicker label="Add Tweaks (.deb / .dylib)" hint="Upload one or more .deb or .dylib files" accept=".deb,.dylib,application/octet-stream" file={tweakFiles} onChange={setTweakFiles} multiple compact/></div>
-          </div>}
-        </section>
+          <div className="signing-file-section signing-credentials-section">
+            <FilePicker label="P12 certificate" hint=".p12 or .pfx certificate file" accept=".p12,.pfx,application/x-pkcs12" file={p12File} onChange={setP12File} required />
+            <div className="field-block password-field-block">
+              <div className="field-heading"><label htmlFor="p12-password">P12 password</label><span className="field-hint">Only needed for a password-protected certificate</span></div>
+              <div className="password-input-wrap">
+                <input id="p12-password" className="text-input" type={showPassword ? 'text' : 'password'} value={p12Password} onChange={(event) => setP12Password(event.target.value)} placeholder="Enter P12 password" autoComplete="new-password" />
+                <button type="button" className="password-toggle" onClick={() => setShowPassword(!showPassword)} aria-label={showPassword ? 'Hide P12 password' : 'Show P12 password'}><Icon name={showPassword ? 'eyeOff' : 'eye'} size={17}/></button>
+              </div>
+              <div className="privacy-hint"><Icon name="lock" size={13}/> Sent with the signing request and not saved in browser storage.</div>
+            </div>
+            <FilePicker label="Mobileprovision" hint=".mobileprovision profile" accept=".mobileprovision,application/octet-stream" file={profileFile} onChange={setProfileFile} required />
+          </div>
 
-        {error && <div className="form-alert form-alert-error" role="alert"><Icon name="info" size={18}/><span>{error}</span></div>}
-        {busy && <div className="progress-card" aria-live="polite"><div className="progress-head"><span><i className="progress-spinner"/>{stage || 'Processing'}</span><strong>{progress}%</strong></div><div className="progress-track"><i style={{ width: `${progress}%` }}/></div><small>{jobId ? `Job ID: ${jobId}` : 'Preparing your files for the signing worker.'}</small></div>}
-        {result && <div className="result-card" role="status"><div className="result-icon"><Icon name="check" size={20}/></div><div className="result-content"><h3>Your signed IPA is ready</h3><p>Signing completed successfully. Use the available links below.</p><div className="result-links">{(result.installUrl || result.otaUrl) && <a className="button button-primary" href={result.installUrl || result.otaUrl}>Install via OTA <Icon name="phone" size={16}/></a>}{(result.downloadUrl || result.ipaUrl) && <a className="button button-secondary" href={result.downloadUrl || result.ipaUrl} target="_blank" rel="noreferrer">Download IPA <Icon name="arrow" size={16}/></a>}{result.manifestUrl && <a className="result-text-link" href={result.manifestUrl} target="_blank" rel="noreferrer">View manifest</a>}</div></div></div>}
-        <div className="submit-row"><div className="submit-note"><Icon name="lock" size={14}/><span>{selectedFileCount} file{selectedFileCount === 1 ? '' : 's'} selected · Credentials are used to process this signing job.</span></div><button type="submit" className="button button-primary button-large submit-button" disabled={busy}>{busy ? <><i className="button-spinner"/> Signing…</> : <>Sign application <Icon name="arrow" size={18}/></>}</button></div>
-        {result && <button type="button" className="start-another-button" onClick={resetForm}>Start another signing job</button>}
+          <section className="advanced-inline">
+            <button type="button" className="advanced-heading advanced-heading-compact" onClick={() => setAdvancedOpen(!advancedOpen)} aria-expanded={advancedOpen}>
+              <span className="advanced-heading-copy"><Icon name="sliders" size={17}/><span><strong>Advanced options</strong><small>App details, display settings and tweaks</small></span></span>
+              <span className={`accordion-chevron${advancedOpen ? ' expanded' : ''}`}><Icon name="chevron" size={17}/></span>
+            </button>
+            {advancedOpen && <div className="advanced-content advanced-content-compact">
+              <div className="subsection-heading"><h3>App information</h3><span>Leave blank to keep detected values</span></div>
+              <div className="form-grid-two">
+                <FormField label="App name" value={appName} onChange={setAppName} placeholder="My App"/>
+                <FormField label="Bundle identifier" value={bundleId} onChange={setBundleId} placeholder="com.example.app"/>
+                <FormField label="App version" value={appVersion} onChange={setAppVersion} placeholder="1.0.0"/>
+                <FormField label="Build number" value={buildNumber} onChange={setBuildNumber} placeholder="1"/>
+                <FormField label="Minimum iOS version" value={minimumIOS} onChange={setMinimumIOS} placeholder="15.0" hint="Only set a value supported by the app"/>
+              </div>
+              <div className="subsection-heading subsection-spaced"><h3>Display and gaming</h3><span>Optional Info.plist settings</span></div>
+              <div className="switch-list">
+                <Switch label="ProMotion support" description="Add the high-refresh-rate support property. This does not force 120 FPS." checked={proMotion} onChange={setProMotion}/>
+                <Switch label="Game Mode support" description="Declare Game Mode support for compatible iOS versions." checked={gameMode} onChange={setGameMode}/>
+              </div>
+              <div className="subsection-heading subsection-spaced"><h3>Application contents</h3><span>Optional cleanup</span></div>
+              <div className="switch-list">
+                <Switch label="Remove app extensions" description="Ask the signing worker to remove embedded app extensions where supported." checked={removeExtensions} onChange={setRemoveExtensions}/>
+                <Switch label="Remove bundled Watch app" description="Ask the signing worker to remove the embedded Watch app where supported." checked={removeWatchApp} onChange={setRemoveWatchApp}/>
+              </div>
+              <div className="subsection-heading subsection-spaced"><h3>Additional files</h3><span>Optional icon and tweaks</span></div>
+              <FilePicker label="App icon" hint="PNG or JPG · square image recommended" accept=".png,.jpg,.jpeg,image/png,image/jpeg" file={iconFile} onChange={setIconFile} compact/>
+              <div className="tweak-upload-space"><FilePicker label="Add Tweaks (.deb / .dylib)" hint="Select one or more .deb or .dylib files" accept=".deb,.dylib,application/octet-stream" file={tweakFiles} onChange={setTweakFiles} multiple compact/></div>
+            </div>}
+          </section>
+
+          {error && <div className="form-alert form-alert-error" role="alert"><Icon name="info" size={17}/><span>{error}</span></div>}
+          {busy && <div className="progress-card" aria-live="polite"><div className="progress-head"><span><i className="progress-spinner"/>{stage || 'Processing'}</span><strong>{progress}%</strong></div><div className="progress-track"><i style={{ width: `${progress}%` }}/></div><small>{jobId ? `Job ID: ${jobId}` : 'Preparing your files for the signing worker.'}</small></div>}
+          {result && <div className="result-card" role="status"><div className="result-icon"><Icon name="check" size={19}/></div><div className="result-content"><h3>Your signed IPA is ready</h3><p>Signing completed successfully. Use the available links below.</p><div className="result-links">{(result.installUrl || result.otaUrl) && <a className="button button-primary" href={result.installUrl || result.otaUrl}>Install via OTA <Icon name="phone" size={15}/></a>}{(result.downloadUrl || result.ipaUrl) && <a className="button button-secondary" href={result.downloadUrl || result.ipaUrl} target="_blank" rel="noreferrer">Download IPA <Icon name="arrow" size={15}/></a>}{result.manifestUrl && <a className="result-text-link" href={result.manifestUrl} target="_blank" rel="noreferrer">View manifest</a>}</div></div></div>}
+          <div className="submit-row submit-row-compact">
+            <div className="submit-note"><Icon name="lock" size={13}/><span>{selectedFileCount} file{selectedFileCount === 1 ? '' : 's'} selected</span></div>
+            <button type="submit" className="button button-primary button-large submit-button" disabled={busy}>{busy ? <><i className="button-spinner"/> Signing…</> : <>Sign application <Icon name="arrow" size={17}/></>}</button>
+          </div>
+          {result && <button type="button" className="start-another-button" onClick={resetForm}>Start another signing job</button>}
+        </section>
       </form>
-
-      <aside className="signing-sidebar">
-        <div className="sidebar-info-card"><span className="sidebar-card-icon"><Icon name="shield" size={20}/></span><h3>Signing checklist</h3><ul><li><Icon name="check" size={15}/> IPA package or direct URL</li><li><Icon name="check" size={15}/> P12 certificate and password if required</li><li><Icon name="check" size={15}/> Matching provisioning profile</li><li><Icon name="check" size={15}/> Compatible app identifier and entitlements</li></ul></div>
-        <div className="sidebar-info-card sidebar-blue-card"><span className="sidebar-card-icon"><Icon name="info" size={20}/></span><h3>Before you sign</h3><p>Changing the bundle ID or entitlements may require a matching provisioning profile. Some app features may stop working if their required entitlements are removed.</p></div>
-        <div className="sidebar-mini-note"><Icon name="clock" size={17}/><p>Signing runs as a background job. Keep this page open until the result appears.</p></div>
-      </aside>
     </div>
   );
 }

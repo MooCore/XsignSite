@@ -3,8 +3,7 @@ import Link from 'next/link';
 export default function Brand({ footer = false }) {
   return (
     <Link href="/" className={`brand${footer ? ' brand-footer' : ''}`} aria-label="Xsign home">
-      <span className="brand-mark" aria-hidden="true"><span /></span>
-      <span className="brand-word">Xsign</span>
+      <img className="brand-logo" src="/xsign-logo.webp" alt="Xsign" width="58" height="58" />
     </Link>
   );
 }
