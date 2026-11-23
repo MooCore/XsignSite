@@ -3,17 +3,17 @@ import SigningForm from '../../components/signing-form';
 
 export const metadata = {
   title: 'IPA Signer',
-  description: 'Upload an IPA and signing credentials, configure app options, and submit a signing job with Xsign.',
+  description: 'Sign iOS IPA files with your certificate, provisioning profile and optional app settings using Xsign.',
 };
 
 export default function SignPage() {
   return (
-    <section className="sign-page section-pad">
-      <div className="page-container sign-container">
-        <div className="sign-page-heading">
-          <span className="section-kicker">XSIGN SIGNING STUDIO</span>
-          <h1>Sign your <span>IPA.</span></h1>
-          <p>Provide your app and signing credentials, then adjust the options you need. Your P12 password is requested separately and is not saved in this browser.</p>
+    <section className="sign-page simple-sign-page">
+      <div className="page-container sign-container simple-sign-container">
+        <div className="simple-sign-heading">
+          <span className="simple-eyebrow">XSIGN IPA SIGNER</span>
+          <h1>Sign your IPA</h1>
+          <p>Add your IPA, certificate and provisioning profile below. Open advanced options only when you need to customize the app.</p>
         </div>
         <Suspense fallback={<div className="loading-panel">Loading signer…</div>}><SigningForm /></Suspense>
       </div>
